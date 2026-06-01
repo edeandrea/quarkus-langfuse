@@ -1,0 +1,85 @@
+package io.quarkiverse.langfuse.client.jaxrs;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+
+import com.langfuse.api.model.GetScoresResponse;
+import com.langfuse.api.model.Score;
+import com.langfuse.api.model.ScoreDataType;
+import com.langfuse.api.model.ScoreSource;
+import com.langfuse.api.scores.ScoresApi.APIScoresGetByIdRequest;
+import com.langfuse.api.scores.ScoresApi.APIScoresGetManyRequest;
+
+/**
+ * Langfuse Scores Async API
+ */
+public interface QuarkusScoresAsyncApi extends com.langfuse.api.scores.async.ScoresApi {
+
+    /**
+     * Get a score (supports both trace and session scores)
+     */
+    @GET
+    @Path("/api/public/v2/scores/{scoreId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    CompletionStage<Score> scoresGetById(
+            @PathParam("scoreId") String scoreId);
+
+    /**
+     * Get a score (supports both trace and session scores)
+     */
+    @Override
+    default CompletionStage<Score> scoresGetById(APIScoresGetByIdRequest apiRequest) {
+        return scoresGetById(apiRequest.scoreId());
+    }
+
+    /**
+     * Get a list of scores (supports both trace and session scores)
+     */
+    @GET
+    @Path("/api/public/v2/scores")
+    @Produces(MediaType.APPLICATION_JSON)
+    CompletionStage<GetScoresResponse> scoresGetMany(
+            @QueryParam("page") Integer page,
+            @QueryParam("limit") Integer limit,
+            @QueryParam("userId") String userId,
+            @QueryParam("name") String name,
+            @QueryParam("fromTimestamp") OffsetDateTime fromTimestamp,
+            @QueryParam("toTimestamp") OffsetDateTime toTimestamp,
+            @QueryParam("environment") List<String> environment,
+            @QueryParam("source") ScoreSource source,
+            @QueryParam("operator") String operator,
+            @QueryParam("value") Double value,
+            @QueryParam("scoreIds") String scoreIds,
+            @QueryParam("configId") String configId,
+            @QueryParam("sessionId") String sessionId,
+            @QueryParam("datasetRunId") String datasetRunId,
+            @QueryParam("traceId") String traceId,
+            @QueryParam("observationId") String observationId,
+            @QueryParam("queueId") String queueId,
+            @QueryParam("dataType") ScoreDataType dataType,
+            @QueryParam("traceTags") List<String> traceTags,
+            @QueryParam("fields") String fields,
+            @QueryParam("filter") String filter);
+
+    /**
+     * Get a list of scores (supports both trace and session scores)
+     */
+    @Override
+    default CompletionStage<GetScoresResponse> scoresGetMany(APIScoresGetManyRequest apiRequest) {
+        return scoresGetMany(apiRequest.page(), apiRequest.limit(), apiRequest.userId(), apiRequest.name(),
+                apiRequest.fromTimestamp(), apiRequest.toTimestamp(), apiRequest.environment(), apiRequest.source(),
+                apiRequest.operator(), apiRequest.value(), apiRequest.scoreIds(), apiRequest.configId(),
+                apiRequest.sessionId(), apiRequest.datasetRunId(), apiRequest.traceId(), apiRequest.observationId(),
+                apiRequest.queueId(), apiRequest.dataType(), apiRequest.traceTags(), apiRequest.fields(),
+                apiRequest.filter());
+    }
+
+}
