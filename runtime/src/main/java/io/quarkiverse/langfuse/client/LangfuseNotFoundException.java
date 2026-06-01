@@ -1,7 +1,9 @@
 package io.quarkiverse.langfuse.client;
 
-public class LangfuseNotFoundException extends RuntimeException {
+import com.langfuse.api.LangfuseApiException;
+
+public class LangfuseNotFoundException extends LangfuseApiException {
     public LangfuseNotFoundException(String message) {
-        super(message);
+        super(message, 404);
     }
 }

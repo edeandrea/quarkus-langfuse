@@ -7,35 +7,34 @@ import jakarta.ws.rs.core.MediaType;
 
 import com.langfuse.api.LangfuseAsyncApis;
 
-import io.quarkiverse.langfuse.client.jaxrs.AnnotationQueuesAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.BlobStorageIntegrationsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.CommentsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.DatasetItemsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.DatasetRunItemsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.DatasetsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.HealthAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.IngestionAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.LangfuseExceptionMapper;
-import io.quarkiverse.langfuse.client.jaxrs.LegacyMetricsV1AsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.LegacyObservationsV1AsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.LegacyScoreV1AsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.LlmConnectionsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.MediaAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.MetricsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.ModelsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.ObservationsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.OpentelemetryAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.OrganizationsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.ProjectsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.PromptVersionAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.PromptsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.ScimAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.ScoreConfigsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.ScoresAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.SessionsAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.TraceAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.UnstableEvaluationRulesAsyncApi;
-import io.quarkiverse.langfuse.client.jaxrs.UnstableEvaluatorsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusAnnotationQueuesAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusBlobStorageIntegrationsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusCommentsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusDatasetItemsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusDatasetRunItemsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusDatasetsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusHealthAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusIngestionAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusLegacyMetricsV1AsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusLegacyObservationsV1AsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusLegacyScoreV1AsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusLlmConnectionsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusMediaAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusMetricsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusModelsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusObservationsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusOpentelemetryAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusOrganizationsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusProjectsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusPromptVersionAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusPromptsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusScimAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusScoreConfigsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusScoresAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusSessionsAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusTraceAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusUnstableEvaluationRulesAsyncApi;
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusUnstableEvaluatorsAsyncApi;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkus.rest.client.reactive.ClientBasicAuth;
 
@@ -44,34 +43,33 @@ import io.quarkus.rest.client.reactive.ClientBasicAuth;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public interface QuarkusLangfuseAsyncClient extends LangfuseAsyncApis,
-        LangfuseExceptionMapper,
-        AnnotationQueuesAsyncApi,
-        BlobStorageIntegrationsAsyncApi,
-        CommentsAsyncApi,
-        DatasetItemsAsyncApi,
-        DatasetRunItemsAsyncApi,
-        DatasetsAsyncApi,
-        HealthAsyncApi,
-        IngestionAsyncApi,
-        LegacyMetricsV1AsyncApi,
-        LegacyObservationsV1AsyncApi,
-        LegacyScoreV1AsyncApi,
-        LlmConnectionsAsyncApi,
-        MediaAsyncApi,
-        MetricsAsyncApi,
-        ModelsAsyncApi,
-        ObservationsAsyncApi,
-        OpentelemetryAsyncApi,
-        OrganizationsAsyncApi,
-        ProjectsAsyncApi,
-        PromptVersionAsyncApi,
-        PromptsAsyncApi,
-        ScimAsyncApi,
-        ScoreConfigsAsyncApi,
-        ScoresAsyncApi,
-        SessionsAsyncApi,
-        TraceAsyncApi,
-        UnstableEvaluationRulesAsyncApi,
-        UnstableEvaluatorsAsyncApi {
+        QuarkusAnnotationQueuesAsyncApi,
+        QuarkusBlobStorageIntegrationsAsyncApi,
+        QuarkusCommentsAsyncApi,
+        QuarkusDatasetItemsAsyncApi,
+        QuarkusDatasetRunItemsAsyncApi,
+        QuarkusDatasetsAsyncApi,
+        QuarkusHealthAsyncApi,
+        QuarkusIngestionAsyncApi,
+        QuarkusLegacyMetricsV1AsyncApi,
+        QuarkusLegacyObservationsV1AsyncApi,
+        QuarkusLegacyScoreV1AsyncApi,
+        QuarkusLlmConnectionsAsyncApi,
+        QuarkusMediaAsyncApi,
+        QuarkusMetricsAsyncApi,
+        QuarkusModelsAsyncApi,
+        QuarkusObservationsAsyncApi,
+        QuarkusOpentelemetryAsyncApi,
+        QuarkusOrganizationsAsyncApi,
+        QuarkusProjectsAsyncApi,
+        QuarkusPromptVersionAsyncApi,
+        QuarkusPromptsAsyncApi,
+        QuarkusScimAsyncApi,
+        QuarkusScoreConfigsAsyncApi,
+        QuarkusScoresAsyncApi,
+        QuarkusSessionsAsyncApi,
+        QuarkusTraceAsyncApi,
+        QuarkusUnstableEvaluationRulesAsyncApi,
+        QuarkusUnstableEvaluatorsAsyncApi {
 
 }

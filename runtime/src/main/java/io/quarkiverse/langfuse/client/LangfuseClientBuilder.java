@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jboss.resteasy.reactive.client.api.LoggingScope;
 
+import io.quarkiverse.langfuse.client.jaxrs.QuarkusLangfuseExceptionMapper;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 
@@ -85,7 +86,8 @@ public final class LangfuseClientBuilder<T> {
         var restApiBuilder = QuarkusRestClientBuilder.newBuilder()
                 .baseUri(URI.create(this.baseUrl))
                 .connectTimeout(defaultConnectTimeout.toSeconds(), TimeUnit.SECONDS)
-                .readTimeout(defaultReadTimeout.toSeconds(), TimeUnit.SECONDS);
+                .readTimeout(defaultReadTimeout.toSeconds(), TimeUnit.SECONDS)
+                .register(new QuarkusLangfuseExceptionMapper());
 
         if (this.logRequests || this.logResponses) {
             restApiBuilder
