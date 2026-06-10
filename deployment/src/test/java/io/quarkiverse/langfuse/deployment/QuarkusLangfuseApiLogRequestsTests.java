@@ -15,12 +15,11 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import io.quarkus.test.QuarkusUnitTest;
-
-import io.quarkiverse.langfuse.config.LangfuseConfig;
-
 import com.langfuse.api.LangfuseApi;
 import com.langfuse.api.model.HealthResponse;
+
+import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkus.test.QuarkusUnitTest;
 
 class QuarkusLangfuseApiLogRequestsTests extends RequestResponseLoggingTests {
     @RegisterExtension
