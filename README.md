@@ -45,8 +45,8 @@ Configure your Langfuse connection in `application.properties`:
 
 ```properties
 quarkus.langfuse.base-url=https://cloud.langfuse.com
-quarkus.langfuse.username=pk-lf-...
-quarkus.langfuse.password=sk-lf-...
+quarkus.langfuse.public-key=pk-lf-...
+quarkus.langfuse.secret-key=sk-lf-...
 ```
 
 > **Note:** When DevServices is enabled (the default in dev/test mode), `base-url`, `username`, and `password` are automatically configured for you. You only need to set these properties when connecting to an external Langfuse instance or in production.
@@ -56,8 +56,8 @@ quarkus.langfuse.password=sk-lf-...
 | Property | Type | Default | Description |
 |---|---|---|---|
 | `quarkus.langfuse.base-url` | `String` | _required_ | Base URL of the Langfuse server |
-| `quarkus.langfuse.username` | `String` | _required_ | Langfuse project public key |
-| `quarkus.langfuse.password` | `String` | _required_ | Langfuse project secret key |
+| `quarkus.langfuse.piblic-key` | `String` | _required_ | Langfuse project public key |
+| `quarkus.langfuse.secret-key` | `String` | _required_ | Langfuse project secret key |
 | `quarkus.langfuse.timeout` | `Duration` | `1m` | Default timeout for Langfuse API calls |
 | `quarkus.langfuse.connect-timeout` | `Duration` | `${quarkus.langfuse.timeout}` | Timeout to establish a connection |
 | `quarkus.langfuse.read-timeout` | `Duration` | `${quarkus.langfuse.timeout}` | Timeout for receiving a response |
