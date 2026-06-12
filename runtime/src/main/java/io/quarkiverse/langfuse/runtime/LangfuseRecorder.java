@@ -1,5 +1,6 @@
 package io.quarkiverse.langfuse.runtime;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -14,6 +15,7 @@ import io.quarkiverse.langfuse.runtime.otel.LangfuseSpanProcessor;
 import io.quarkus.arc.SyntheticCreationalContext;
 import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
+import io.vertx.core.Vertx;
 
 @Recorder
 public class LangfuseRecorder {
@@ -41,13 +43,23 @@ public class LangfuseRecorder {
         };
     }
 
-    public Supplier<LangfuseSpanProcessor> langfuseSpanProcessor() {
-        return new Supplier<LangfuseSpanProcessor>() {
-            @Override
-            public LangfuseSpanProcessor get() {
-                return new LangfuseSpanProcessor(config.getValue());
-            }
-        };
+    public Supplier<LangfuseSpanProcessor> langfuseSpanProcessor(Optional<RuntimeValue<Boolean>> otelSdkEnabled,
+            Supplier<Vertx> vertx) {
+        return otelSdkEnabled
+                .filter(RuntimeValue::getValue)
+                .<Supplier<LangfuseSpanProcessor>> map(
+                        ignored -> new Supplier<LangfuseSpanProcessor>() {
+                            @Override
+                            public LangfuseSpanProcessor get() {
+                                return new LangfuseSpanProcessor(config.getValue(), vertx.get());
+                            }
+                        })
+                .orElseGet(new Supplier<Supplier<LangfuseSpanProcessor>>() {
+                    @Override
+                    public Supplier<LangfuseSpanProcessor> get() {
+                        return LangfuseSpanProcessor::noop;
+                    }
+                });
     }
 
     public Function<SyntheticCreationalContext<LangfuseApi>, LangfuseApi> langfuseApi() {

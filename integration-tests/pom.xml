@@ -13,6 +13,8 @@
 
 	<modules>
 		<module>langfuse-api-tests</module>
+		<module>langfuse-otel-no-lc4j-tests</module>
+		<module>langfuse-no-otel-no-lc4j-tests</module>
 	</modules>
 
 	<properties>
