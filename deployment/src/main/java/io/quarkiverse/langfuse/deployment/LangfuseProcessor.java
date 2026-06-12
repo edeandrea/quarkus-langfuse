@@ -18,8 +18,6 @@ import io.quarkiverse.langfuse.runtime.langchain4j.LangfuseLangchain4jConfigBuil
 import io.quarkiverse.langfuse.runtime.otel.LangfuseOtelConfigBuilder;
 import io.quarkus.arc.deployment.OpenTelemetrySdkBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
-import io.quarkus.deployment.Capabilities;
-import io.quarkus.deployment.Capability;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -80,12 +78,11 @@ class LangfuseProcessor {
 
     @BuildStep
     void exportOtelToLangfuseOnly(
-            Capabilities capabilities,
             LangfuseBuildTimeConfig buildTimeConfig,
             Optional<OpenTelemetrySdkBuildItem> openTelemetrySdkBuildItem,
             BuildProducer<RunTimeConfigBuilderBuildItem> runTimeConfigBuilder) {
 
-        if (isOtelAvailableAndEnabled(capabilities, buildTimeConfig, openTelemetrySdkBuildItem)
+        if (isOtelAvailableAndEnabled(buildTimeConfig, openTelemetrySdkBuildItem)
                 && (buildTimeConfig.otel().exportTarget() == ExportTarget.LANGFUSE_ONLY)) {
             runTimeConfigBuilder.produce(new RunTimeConfigBuilderBuildItem(LangfuseOtelConfigBuilder.class));
         }
@@ -93,13 +90,13 @@ class LangfuseProcessor {
 
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
-    void exportOtelToMultipleOtlpBackends(Capabilities capabilities, LangfuseBuildTimeConfig buildTimeConfig,
+    void exportOtelToMultipleOtlpBackends(LangfuseBuildTimeConfig buildTimeConfig,
             LangfuseRecorder recorder,
             Optional<OpenTelemetrySdkBuildItem> openTelemetrySdkBuildItem,
             CoreVertxBuildItem vertxBuildItem,
             BuildProducer<SyntheticBeanBuildItem> beanProducer) {
 
-        if (isOtelAvailableAndEnabled(capabilities, buildTimeConfig, openTelemetrySdkBuildItem) &&
+        if (isOtelAvailableAndEnabled(buildTimeConfig, openTelemetrySdkBuildItem) &&
                 (buildTimeConfig.otel().exportTarget() == ExportTarget.ALL)) {
 
             beanProducer.produce(
@@ -108,20 +105,21 @@ class LangfuseProcessor {
                             .addType(DotNames.SPAN_PROCESSOR)
                             .setRuntimeInit()
                             .scope(Singleton.class)
-                            .supplier(recorder.langfuseSpanProcessor(vertxBuildItem.getVertx()))
+                            .supplier(recorder.langfuseSpanProcessor(
+                                    OpenTelemetrySdkBuildItem.isOtelSdkEnabled(openTelemetrySdkBuildItem),
+                                    vertxBuildItem.getVertx()))
                             .unremovable()
                             .done());
         }
     }
 
     @BuildStep
-    void registerLangChain4jCapabilities(Capabilities capabilities,
-            CombinedIndexBuildItem indexBuildItem,
+    void registerLangChain4jCapabilities(CombinedIndexBuildItem indexBuildItem,
             LangfuseBuildTimeConfig buildConfig,
             Optional<OpenTelemetrySdkBuildItem> openTelemetrySdkBuildItem,
             BuildProducer<RunTimeConfigBuilderBuildItem> runTimeConfigBuilder) {
 
-        if (isOtelAvailableAndEnabled(capabilities, buildConfig, openTelemetrySdkBuildItem)
+        if (isOtelAvailableAndEnabled(buildConfig, openTelemetrySdkBuildItem)
                 && isQuarkusLangchain4jAvailable(indexBuildItem)) {
             runTimeConfigBuilder.produce(new RunTimeConfigBuilderBuildItem(LangfuseLangchain4jConfigBuilder.class));
         }
@@ -137,10 +135,9 @@ class LangfuseProcessor {
         return indexBuildItem.getIndex().getClassByName(DotNames.REGISTER_AI_SERVICE) != null;
     }
 
-    private static boolean isOtelAvailableAndEnabled(Capabilities capabilities, LangfuseBuildTimeConfig buildTimeConfig,
+    private static boolean isOtelAvailableAndEnabled(LangfuseBuildTimeConfig buildTimeConfig,
             Optional<OpenTelemetrySdkBuildItem> openTelemetrySdkBuildItem) {
         return openTelemetrySdkBuildItem.map(OpenTelemetrySdkBuildItem::isTracingBuildTimeEnabled).orElse(false) &&
-                capabilities.isPresent(Capability.OPENTELEMETRY_TRACER) &&
                 buildTimeConfig.otel().enabled();
     }
 }

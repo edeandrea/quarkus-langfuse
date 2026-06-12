@@ -52,6 +52,18 @@ public class LangfuseSpanProcessor implements SpanProcessor {
         this.delegate = BatchSpanProcessor.builder(createActualExporter(langfuseConfig, vertx)).build();
     }
 
+    private LangfuseSpanProcessor() {
+        this.delegate = null;
+    }
+
+    public static LangfuseSpanProcessor noop() {
+        return new LangfuseSpanProcessor();
+    }
+
+    public boolean isNoop() {
+        return this.delegate == null;
+    }
+
     private static SpanExporter createActualExporter(LangfuseConfig langfuseConfig, Vertx vertx) {
         LOG.debug("Initializing Langfuse OTLP Span Processor");
         var exporter = createUnderlyingExporter(langfuseConfig, vertx);
@@ -106,31 +118,35 @@ public class LangfuseSpanProcessor implements SpanProcessor {
 
     @Override
     public boolean isStartRequired() {
-        return true;
+        return !isNoop();
     }
 
     @Override
     public void onEnd(ReadableSpan span) {
-        this.delegate.onEnd(span);
+        if (!isNoop()) {
+            this.delegate.onEnd(span);
+        }
     }
 
     @Override
     public boolean isEndRequired() {
-        return this.delegate.isEndRequired();
+        return !isNoop() && this.delegate.isEndRequired();
     }
 
     @Override
     public CompletableResultCode shutdown() {
-        return this.delegate.shutdown();
+        return isNoop() ? CompletableResultCode.ofSuccess() : this.delegate.shutdown();
     }
 
     @Override
     public CompletableResultCode forceFlush() {
-        return this.delegate.forceFlush();
+        return isNoop() ? CompletableResultCode.ofSuccess() : this.delegate.forceFlush();
     }
 
     @Override
     public void close() {
-        this.delegate.close();
+        if (!isNoop()) {
+            this.delegate.close();
+        }
     }
 }

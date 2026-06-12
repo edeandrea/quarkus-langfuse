@@ -1,5 +1,6 @@
 package io.quarkiverse.langfuse.runtime;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -42,13 +43,23 @@ public class LangfuseRecorder {
         };
     }
 
-    public Supplier<LangfuseSpanProcessor> langfuseSpanProcessor(Supplier<Vertx> vertx) {
-        return new Supplier<LangfuseSpanProcessor>() {
-            @Override
-            public LangfuseSpanProcessor get() {
-                return new LangfuseSpanProcessor(config.getValue(), vertx.get());
-            }
-        };
+    public Supplier<LangfuseSpanProcessor> langfuseSpanProcessor(Optional<RuntimeValue<Boolean>> otelSdkEnabled,
+            Supplier<Vertx> vertx) {
+        return otelSdkEnabled
+                .filter(RuntimeValue::getValue)
+                .<Supplier<LangfuseSpanProcessor>> map(
+                        ignored -> new Supplier<LangfuseSpanProcessor>() {
+                            @Override
+                            public LangfuseSpanProcessor get() {
+                                return new LangfuseSpanProcessor(config.getValue(), vertx.get());
+                            }
+                        })
+                .orElseGet(new Supplier<Supplier<LangfuseSpanProcessor>>() {
+                    @Override
+                    public Supplier<LangfuseSpanProcessor> get() {
+                        return LangfuseSpanProcessor::noop;
+                    }
+                });
     }
 
     public Function<SyntheticCreationalContext<LangfuseApi>, LangfuseApi> langfuseApi() {
