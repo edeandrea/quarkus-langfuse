@@ -13,10 +13,12 @@ import io.opentelemetry.api.metrics.MeterProvider;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.exporter.internal.http.HttpExporter;
 import io.opentelemetry.exporter.internal.otlp.traces.TraceRequestMarshaler;
+import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.common.InternalTelemetryVersion;
 import io.opentelemetry.sdk.internal.ComponentId;
 import io.opentelemetry.sdk.internal.StandardComponentId;
 import io.opentelemetry.sdk.trace.ReadWriteSpan;
+import io.opentelemetry.sdk.trace.ReadableSpan;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
@@ -24,7 +26,6 @@ import io.opentelemetry.semconv.incubating.GenAiIncubatingAttributes;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkiverse.langfuse.config.LangfuseOtelConfig.SpanFilterType;
 import io.quarkus.opentelemetry.runtime.exporter.otlp.sender.VertxHttpSender;
-import io.quarkus.opentelemetry.runtime.exporter.otlp.tracing.LateBoundSpanProcessor;
 import io.quarkus.opentelemetry.runtime.exporter.otlp.tracing.VertxHttpSpanExporter;
 import io.vertx.core.Vertx;
 
@@ -41,11 +42,14 @@ import io.vertx.core.Vertx;
  * {@link SpanFilterType}. Depending on the filter, it may include all spans or
  * limit the scope to AI-related spans.
  */
-public class LangfuseSpanProcessor extends LateBoundSpanProcessor {
+public class LangfuseSpanProcessor implements SpanProcessor {
     private static final Logger LOG = Logger.getLogger(LangfuseSpanProcessor.class);
 
+    private final SpanProcessor delegate;
+
     public LangfuseSpanProcessor(LangfuseConfig langfuseConfig, Vertx vertx) {
-        super(BatchSpanProcessor.builder(createActualExporter(langfuseConfig, vertx)).build());
+        super();
+        this.delegate = BatchSpanProcessor.builder(createActualExporter(langfuseConfig, vertx)).build();
     }
 
     private static SpanExporter createActualExporter(LangfuseConfig langfuseConfig, Vertx vertx) {
@@ -97,11 +101,36 @@ public class LangfuseSpanProcessor extends LateBoundSpanProcessor {
                 .ifPresent(
                         conversationId -> span.setAttribute(GenAiIncubatingAttributes.GEN_AI_CONVERSATION_ID, conversationId));
 
-        super.onStart(parentContext, span);
+        this.delegate.onStart(parentContext, span);
     }
 
     @Override
     public boolean isStartRequired() {
         return true;
+    }
+
+    @Override
+    public void onEnd(ReadableSpan span) {
+        this.delegate.onEnd(span);
+    }
+
+    @Override
+    public boolean isEndRequired() {
+        return this.delegate.isEndRequired();
+    }
+
+    @Override
+    public CompletableResultCode shutdown() {
+        return this.delegate.shutdown();
+    }
+
+    @Override
+    public CompletableResultCode forceFlush() {
+        return this.delegate.forceFlush();
+    }
+
+    @Override
+    public void close() {
+        this.delegate.close();
     }
 }

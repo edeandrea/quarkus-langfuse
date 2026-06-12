@@ -8,6 +8,14 @@ import jakarta.inject.Singleton;
 
 import org.jboss.jandex.ClassType;
 
+import com.langfuse.api.spi.LangfuseApiBuilderFactory;
+
+import io.quarkiverse.langfuse.client.QuarkusLangfuseApiBuilderFactory;
+import io.quarkiverse.langfuse.deployment.config.LangfuseBuildTimeConfig;
+import io.quarkiverse.langfuse.deployment.config.LangfuseOtelBuildTimeConfig.ExportTarget;
+import io.quarkiverse.langfuse.runtime.LangfuseRecorder;
+import io.quarkiverse.langfuse.runtime.langchain4j.LangfuseLangchain4jConfigBuilder;
+import io.quarkiverse.langfuse.runtime.otel.LangfuseOtelConfigBuilder;
 import io.quarkus.arc.deployment.OpenTelemetrySdkBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.deployment.Capabilities;
@@ -22,15 +30,6 @@ import io.quarkus.deployment.builditem.IndexDependencyBuildItem;
 import io.quarkus.deployment.builditem.RunTimeConfigBuilderBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ServiceProviderBuildItem;
 import io.quarkus.vertx.core.deployment.CoreVertxBuildItem;
-
-import io.quarkiverse.langfuse.client.QuarkusLangfuseApiBuilderFactory;
-import io.quarkiverse.langfuse.deployment.config.LangfuseBuildTimeConfig;
-import io.quarkiverse.langfuse.deployment.config.LangfuseOtelBuildTimeConfig.ExportTarget;
-import io.quarkiverse.langfuse.runtime.LangfuseRecorder;
-import io.quarkiverse.langfuse.runtime.langchain4j.LangfuseLangchain4jConfigBuilder;
-import io.quarkiverse.langfuse.runtime.otel.LangfuseOtelConfigBuilder;
-
-import com.langfuse.api.spi.LangfuseApiBuilderFactory;
 
 class LangfuseProcessor {
     private static final String FEATURE = "langfuse";

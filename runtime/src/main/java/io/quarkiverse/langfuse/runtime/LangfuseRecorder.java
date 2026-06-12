@@ -3,9 +3,7 @@ package io.quarkiverse.langfuse.runtime;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import io.quarkus.arc.SyntheticCreationalContext;
-import io.quarkus.runtime.RuntimeValue;
-import io.quarkus.runtime.annotations.Recorder;
+import com.langfuse.api.LangfuseApi;
 
 import io.quarkiverse.langfuse.QuarkusLangfuseApi;
 import io.quarkiverse.langfuse.client.LangfuseClientBuilder;
@@ -13,9 +11,10 @@ import io.quarkiverse.langfuse.client.QuarkusLangfuseAsyncClient;
 import io.quarkiverse.langfuse.client.QuarkusLangfuseClient;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkiverse.langfuse.runtime.otel.LangfuseSpanProcessor;
+import io.quarkus.arc.SyntheticCreationalContext;
+import io.quarkus.runtime.RuntimeValue;
+import io.quarkus.runtime.annotations.Recorder;
 import io.vertx.core.Vertx;
-
-import com.langfuse.api.LangfuseApi;
 
 @Recorder
 public class LangfuseRecorder {
