@@ -15,10 +15,17 @@ import io.smallrye.config.WithDefault;
 @ConfigGroup
 public interface LangfuseOtelConfig {
     /**
-     * The URL used for ingesting traces in the OpenTelemetry integration
+     * The path used for ingesting traces in the OpenTelemetry integration
+     * for Langfuse, relative to the base URL.
+     */
+    @WithDefault("api/public/otel/v1/traces")
+    String traceIngestionPath();
+
+    /**
+     * The full URL used for ingesting traces in the OpenTelemetry integration
      * for Langfuse. The URL points to the endpoint where trace data is exported.
      */
-    @WithDefault("${quarkus.langfuse.base-url}/api/public/otel/v1/traces")
+    @WithDefault("${quarkus.langfuse.base-url}/${quarkus.langfuse.otel.trace-ingestion-path}")
     String traceIngestionUrl();
 
     /**

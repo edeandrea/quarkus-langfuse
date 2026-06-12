@@ -3,7 +3,9 @@ package io.quarkiverse.langfuse.runtime;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.langfuse.api.LangfuseApi;
+import io.quarkus.arc.SyntheticCreationalContext;
+import io.quarkus.runtime.RuntimeValue;
+import io.quarkus.runtime.annotations.Recorder;
 
 import io.quarkiverse.langfuse.QuarkusLangfuseApi;
 import io.quarkiverse.langfuse.client.LangfuseClientBuilder;
@@ -11,9 +13,9 @@ import io.quarkiverse.langfuse.client.QuarkusLangfuseAsyncClient;
 import io.quarkiverse.langfuse.client.QuarkusLangfuseClient;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkiverse.langfuse.runtime.otel.LangfuseSpanProcessor;
-import io.quarkus.arc.SyntheticCreationalContext;
-import io.quarkus.runtime.RuntimeValue;
-import io.quarkus.runtime.annotations.Recorder;
+import io.vertx.core.Vertx;
+
+import com.langfuse.api.LangfuseApi;
 
 @Recorder
 public class LangfuseRecorder {
@@ -41,11 +43,11 @@ public class LangfuseRecorder {
         };
     }
 
-    public Supplier<LangfuseSpanProcessor> langfuseSpanProcessor() {
+    public Supplier<LangfuseSpanProcessor> langfuseSpanProcessor(Supplier<Vertx> vertx) {
         return new Supplier<LangfuseSpanProcessor>() {
             @Override
             public LangfuseSpanProcessor get() {
-                return new LangfuseSpanProcessor(config.getValue());
+                return new LangfuseSpanProcessor(config.getValue(), vertx.get());
             }
         };
     }

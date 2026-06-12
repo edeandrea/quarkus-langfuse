@@ -1,21 +1,32 @@
 package io.quarkiverse.langfuse.runtime.otel;
 
+import java.net.URI;
+import java.time.Duration;
 import java.util.Base64;
+import java.util.Map;
 import java.util.Optional;
 
 import org.jboss.logging.Logger;
 
 import io.opentelemetry.api.baggage.Baggage;
+import io.opentelemetry.api.metrics.MeterProvider;
 import io.opentelemetry.context.Context;
-import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
-import io.opentelemetry.sdk.common.CompletableResultCode;
+import io.opentelemetry.exporter.internal.http.HttpExporter;
+import io.opentelemetry.exporter.internal.otlp.traces.TraceRequestMarshaler;
+import io.opentelemetry.sdk.common.InternalTelemetryVersion;
+import io.opentelemetry.sdk.internal.ComponentId;
+import io.opentelemetry.sdk.internal.StandardComponentId;
 import io.opentelemetry.sdk.trace.ReadWriteSpan;
-import io.opentelemetry.sdk.trace.ReadableSpan;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.semconv.incubating.GenAiIncubatingAttributes;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkiverse.langfuse.config.LangfuseOtelConfig.SpanFilterType;
+import io.quarkus.opentelemetry.runtime.exporter.otlp.sender.VertxHttpSender;
+import io.quarkus.opentelemetry.runtime.exporter.otlp.tracing.LateBoundSpanProcessor;
+import io.quarkus.opentelemetry.runtime.exporter.otlp.tracing.VertxHttpSpanExporter;
+import io.vertx.core.Vertx;
 
 /**
  * Implementation of the {@link SpanProcessor} interface for integrating with Langfuse.
@@ -30,32 +41,53 @@ import io.quarkiverse.langfuse.config.LangfuseOtelConfig.SpanFilterType;
  * {@link SpanFilterType}. Depending on the filter, it may include all spans or
  * limit the scope to AI-related spans.
  */
-public class LangfuseSpanProcessor implements SpanProcessor {
+public class LangfuseSpanProcessor extends LateBoundSpanProcessor {
     private static final Logger LOG = Logger.getLogger(LangfuseSpanProcessor.class);
 
-    private final SpanProcessor delegate;
+    public LangfuseSpanProcessor(LangfuseConfig langfuseConfig, Vertx vertx) {
+        super(BatchSpanProcessor.builder(createActualExporter(langfuseConfig, vertx)).build());
+    }
 
-    public LangfuseSpanProcessor(LangfuseConfig langfuseConfig) {
+    private static SpanExporter createActualExporter(LangfuseConfig langfuseConfig, Vertx vertx) {
         LOG.debug("Initializing Langfuse OTLP Span Processor");
-        var credentials = "%s:%s".formatted(langfuseConfig.publicKey(), langfuseConfig.secretKey());
-        var authHeader = "Basic %s".formatted(Base64.getEncoder().encodeToString(credentials.getBytes()));
-
-        var exporter = OtlpHttpSpanExporter.builder()
-                .setEndpoint(langfuseConfig.otel().traceIngestionUrl())
-                .addHeader("Authorization", authHeader)
-                .addHeader("x-langfuse-ingestion-version", "1")
-                .build();
-
+        var exporter = createUnderlyingExporter(langfuseConfig, vertx);
         var filteredExporter = switch (langfuseConfig.otel().spanFilter()) {
             case ALL -> exporter;
             case AI_ONLY -> new FilteringAISpanExporter(exporter);
         };
 
-        var enrichingExporter = new LangfuseAttributeEnrichingSpanExporter(filteredExporter, langfuseConfig);
+        return new LangfuseAttributeEnrichingSpanExporter(filteredExporter, langfuseConfig);
+    }
 
-        this.delegate = BatchSpanProcessor
-                .builder(enrichingExporter)
-                .build();
+    private static SpanExporter createUnderlyingExporter(LangfuseConfig langfuseConfig, Vertx vertx) {
+        var credentials = "%s:%s".formatted(langfuseConfig.publicKey(), langfuseConfig.secretKey());
+        var authHeader = "Basic %s".formatted(Base64.getEncoder().encodeToString(credentials.getBytes()));
+        var baseUri = URI.create(langfuseConfig.baseUrl());
+        var signalPath = langfuseConfig.otel().traceIngestionPath();
+
+        if (!signalPath.startsWith("/")) {
+            signalPath = "/" + signalPath;
+        }
+
+        var sender = new VertxHttpSender(
+                baseUri,
+                signalPath,
+                false,
+                Duration.ofSeconds(10),
+                Map.of("Authorization", authHeader, "x-langfuse-ingestion-version", "1"),
+                "application/x-protobuf",
+                options -> {
+                },
+                vertx);
+
+        var httpExporter = new HttpExporter<TraceRequestMarshaler>(
+                ComponentId.generateLazy(StandardComponentId.ExporterType.OTLP_HTTP_SPAN_EXPORTER),
+                sender,
+                MeterProvider::noop,
+                InternalTelemetryVersion.LATEST,
+                langfuseConfig.otel().traceIngestionUrl());
+
+        return new VertxHttpSpanExporter(httpExporter);
     }
 
     @Override
@@ -65,36 +97,11 @@ public class LangfuseSpanProcessor implements SpanProcessor {
                 .ifPresent(
                         conversationId -> span.setAttribute(GenAiIncubatingAttributes.GEN_AI_CONVERSATION_ID, conversationId));
 
-        this.delegate.onStart(parentContext, span);
+        super.onStart(parentContext, span);
     }
 
     @Override
     public boolean isStartRequired() {
         return true;
-    }
-
-    @Override
-    public void onEnd(ReadableSpan span) {
-        this.delegate.onEnd(span);
-    }
-
-    @Override
-    public boolean isEndRequired() {
-        return this.delegate.isEndRequired();
-    }
-
-    @Override
-    public CompletableResultCode shutdown() {
-        return this.delegate.shutdown();
-    }
-
-    @Override
-    public CompletableResultCode forceFlush() {
-        return this.delegate.forceFlush();
-    }
-
-    @Override
-    public void close() {
-        this.delegate.close();
     }
 }

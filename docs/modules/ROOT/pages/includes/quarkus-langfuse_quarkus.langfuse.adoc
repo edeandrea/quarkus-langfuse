@@ -1180,6 +1180,27 @@ endif::add-copy-button-to-env-var[]
 |string
 |`+++default+++`
 
+a| [[quarkus-langfuse_quarkus-langfuse-otel-trace-ingestion-path]] [.property-path]##link:#quarkus-langfuse_quarkus-langfuse-otel-trace-ingestion-path[`+++quarkus.langfuse.otel.trace-ingestion-path+++`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.langfuse.otel.trace-ingestion-path+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+The path used for ingesting traces in the OpenTelemetry integration for Langfuse, relative to the base URL.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_LANGFUSE_OTEL_TRACE_INGESTION_PATH+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_LANGFUSE_OTEL_TRACE_INGESTION_PATH+++`
+endif::add-copy-button-to-env-var[]
+--
+|string
+|`+++api/public/otel/v1/traces+++`
+
 a| [[quarkus-langfuse_quarkus-langfuse-otel-trace-ingestion-url]] [.property-path]##link:#quarkus-langfuse_quarkus-langfuse-otel-trace-ingestion-url[`+++quarkus.langfuse.otel.trace-ingestion-url+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.langfuse.otel.trace-ingestion-url+++[]
@@ -1188,7 +1209,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-The URL used for ingesting traces in the OpenTelemetry integration for Langfuse. The URL points to the endpoint where trace data is exported.
+The full URL used for ingesting traces in the OpenTelemetry integration for Langfuse. The URL points to the endpoint where trace data is exported.
 
 
 ifdef::add-copy-button-to-env-var[]
@@ -1199,7 +1220,7 @@ Environment variable: `+++QUARKUS_LANGFUSE_OTEL_TRACE_INGESTION_URL+++`
 endif::add-copy-button-to-env-var[]
 --
 |string
-|`+++${quarkus.langfuse.base-url}/api/public/otel/v1/traces+++`
+|`+++${quarkus.langfuse.base-url}/${quarkus.langfuse.otel.trace-ingestion-path}+++`
 
 a| [[quarkus-langfuse_quarkus-langfuse-otel-span-filter]] [.property-path]##link:#quarkus-langfuse_quarkus-langfuse-otel-span-filter[`+++quarkus.langfuse.otel.span-filter+++`]##
 ifdef::add-copy-button-to-config-props[]
