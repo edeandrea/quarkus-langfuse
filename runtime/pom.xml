@@ -39,6 +39,7 @@
 			<groupId>io.quarkiverse.langfuse</groupId>
 			<artifactId>quarkus-langfuse-client</artifactId>
 			<version>${project.version}</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
