@@ -9,6 +9,7 @@ import com.langfuse.api.model.CreateEvaluatorRequest;
 import com.langfuse.api.model.Evaluator;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 
 final class DefaultEvaluatorOperations extends AbstractCursorOperations<Evaluator>
         implements EvaluatorOperations {
@@ -21,12 +22,12 @@ final class DefaultEvaluatorOperations extends AbstractCursorOperations<Evaluato
 
     @Override
     public Optional<Evaluator> findByName(String evaluatorName) {
-        return scanForName(Names.require(evaluatorName, "Evaluator name"), EvaluatorNames::of);
+        return scanForName(ValidationUtils.ensureNotBlank(evaluatorName, "Evaluator name"), EvaluatorNames::of);
     }
 
     @Override
     public Evaluator createIfAbsent(CreateEvaluatorRequest request) {
-        var name = Names.require(EvaluatorNames.of(request), "Evaluator name");
+        var name = ValidationUtils.ensureNotBlank(EvaluatorNames.of(request), "Evaluator name");
         return findByName(name)
                 .orElseGet(() -> this.evaluatorsApi.evaluatorsCreate(APIEvaluatorsCreateRequest.newBuilder()
                         .createEvaluatorRequest(request)

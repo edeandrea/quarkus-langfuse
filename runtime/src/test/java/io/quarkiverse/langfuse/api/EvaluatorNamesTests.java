@@ -1,7 +1,7 @@
 package io.quarkiverse.langfuse.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import org.junit.jupiter.api.Test;
 
@@ -72,8 +72,9 @@ class EvaluatorNamesTests {
 
     @Test
     void throwsOnNullCreateRequest() {
-        assertThatNullPointerException()
-                .isThrownBy(() -> EvaluatorNames.of((CreateEvaluatorRequest) null));
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> EvaluatorNames.of((CreateEvaluatorRequest) null))
+                .withMessage("request must not be null");
     }
 
     @Test

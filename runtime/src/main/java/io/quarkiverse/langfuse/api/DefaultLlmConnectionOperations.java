@@ -9,6 +9,7 @@ import com.langfuse.api.model.LlmConnection;
 import com.langfuse.api.model.UpsertLlmConnectionRequest;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 
 final class DefaultLlmConnectionOperations extends AbstractPagedOperations<LlmConnection> implements LlmConnectionOperations {
     private final LlmConnectionsApi llmConnectionsApi;
@@ -20,7 +21,7 @@ final class DefaultLlmConnectionOperations extends AbstractPagedOperations<LlmCo
 
     @Override
     public Optional<LlmConnection> findByProvider(String provider) {
-        return scanForName(Names.require(provider, "Provider"), LlmConnection::getProvider);
+        return scanForName(ValidationUtils.ensureNotBlank(provider, "Provider"), LlmConnection::getProvider);
     }
 
     @Override

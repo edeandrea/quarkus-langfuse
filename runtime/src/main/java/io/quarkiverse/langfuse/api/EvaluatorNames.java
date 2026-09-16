@@ -1,6 +1,5 @@
 package io.quarkiverse.langfuse.api;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import com.langfuse.api.model.CodeEvaluator1;
@@ -9,6 +8,8 @@ import com.langfuse.api.model.CreateEvaluatorRequest;
 import com.langfuse.api.model.CreateLlmAsJudgeEvaluatorRequest1;
 import com.langfuse.api.model.Evaluator;
 import com.langfuse.api.model.LlmAsJudgeEvaluator1;
+
+import io.quarkiverse.langfuse.util.ValidationUtils;
 
 /**
  * Extracts natural-key names from polymorphic evaluator models.
@@ -43,10 +44,10 @@ final class EvaluatorNames {
      *
      * @param request the create request, must not be {@code null}
      * @return the evaluator name, or {@code null} if unrecognized
-     * @throws NullPointerException if {@code request} is {@code null}
+     * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     static String of(CreateEvaluatorRequest request) {
-        Objects.requireNonNull(request, "request must not be null");
+        ValidationUtils.ensureNotNull(request, "request");
 
         return Optional.ofNullable(request.getActualInstance())
                 .flatMap(instance -> Optional.of(instance)

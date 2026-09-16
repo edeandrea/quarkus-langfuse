@@ -7,6 +7,7 @@ import com.langfuse.api.model.CreateEvaluatorRequest;
 import com.langfuse.api.model.CreateLlmAsJudgeEvaluatorRequest1;
 import com.langfuse.api.model.Evaluator;
 
+import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;
 
 /**
@@ -65,9 +66,11 @@ public sealed interface AsyncEvaluatorOperations extends AsyncCursorOperations<E
      *
      * @param request the code evaluator to create if it is missing
      * @return the existing or newly created evaluator. Never {@code null}
+     * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     default Uni<Evaluator> createIfAbsent(CreateCodeEvaluatorRequest1 request) {
-        Objects.requireNonNull(request, "request must not be null");
+        ValidationUtils.ensureNotNull(request, "request");
+
         return createIfAbsent(new CreateEvaluatorRequest(request));
     }
 
@@ -77,9 +80,11 @@ public sealed interface AsyncEvaluatorOperations extends AsyncCursorOperations<E
      *
      * @param request the LLM-as-a-judge evaluator to create if it is missing
      * @return the existing or newly created evaluator. Never {@code null}
+     * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     default Uni<Evaluator> createIfAbsent(CreateLlmAsJudgeEvaluatorRequest1 request) {
-        Objects.requireNonNull(request, "request must not be null");
+        ValidationUtils.ensureNotNull(request, "request");
+
         return createIfAbsent(new CreateEvaluatorRequest(request));
     }
 }

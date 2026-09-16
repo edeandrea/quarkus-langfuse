@@ -7,6 +7,7 @@ import com.langfuse.api.model.CreateEvaluatorRequest;
 import com.langfuse.api.model.Evaluator;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;
 
 final class DefaultAsyncEvaluatorOperations extends AbstractAsyncCursorOperations<Evaluator>
@@ -20,12 +21,12 @@ final class DefaultAsyncEvaluatorOperations extends AbstractAsyncCursorOperation
 
     @Override
     public Uni<Evaluator> findByName(String evaluatorName) {
-        return scanForName(Names.require(evaluatorName, "Evaluator name"), EvaluatorNames::of);
+        return scanForName(ValidationUtils.ensureNotBlank(evaluatorName, "Evaluator name"), EvaluatorNames::of);
     }
 
     @Override
     public Uni<Evaluator> createIfAbsent(CreateEvaluatorRequest request) {
-        var name = Names.require(EvaluatorNames.of(request), "Evaluator name");
+        var name = ValidationUtils.ensureNotBlank(EvaluatorNames.of(request), "Evaluator name");
         return findByName(name)
                 .flatMap(existing -> (existing != null)
                         ? Uni.createFrom().item(existing)

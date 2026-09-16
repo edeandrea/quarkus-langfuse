@@ -9,6 +9,7 @@ import com.langfuse.api.models.ModelsApi.APIModelsCreateRequest;
 import com.langfuse.api.models.ModelsApi.APIModelsListRequest;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 
 final class DefaultModelOperations extends AbstractPagedOperations<Model> implements ModelOperations {
     private final ModelsApi modelsApi;
@@ -20,7 +21,7 @@ final class DefaultModelOperations extends AbstractPagedOperations<Model> implem
 
     @Override
     public Optional<Model> findByName(String modelName) {
-        return scanForName(Names.require(modelName, "Model name"), Model::getModelName);
+        return scanForName(ValidationUtils.ensureNotBlank(modelName, "Model name"), Model::getModelName);
     }
 
     @Override

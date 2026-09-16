@@ -7,6 +7,7 @@ import com.langfuse.api.scoreConfigs.ScoreConfigsApi.APIScoreConfigsGetRequest;
 import com.langfuse.api.scoreConfigs.async.ScoreConfigsApi;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;
 
 final class DefaultAsyncScoreConfigOperations extends AbstractAsyncPagedOperations<ScoreConfig>
@@ -20,7 +21,7 @@ final class DefaultAsyncScoreConfigOperations extends AbstractAsyncPagedOperatio
 
     @Override
     public Uni<ScoreConfig> findByName(String configName) {
-        return scanForName(Names.require(configName, "Score config name"), ScoreConfig::getName);
+        return scanForName(ValidationUtils.ensureNotBlank(configName, "Score config name"), ScoreConfig::getName);
     }
 
     @Override

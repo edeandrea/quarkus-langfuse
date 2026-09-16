@@ -24,6 +24,7 @@ import com.langfuse.api.model.CodeEvaluator1;
 import com.langfuse.api.model.CodeEvaluatorSourceCodeLanguage;
 import com.langfuse.api.model.CreateCodeEvaluatorRequest1;
 import com.langfuse.api.model.CreateEvaluatorRequest;
+import com.langfuse.api.model.CreateLlmAsJudgeEvaluatorRequest1;
 
 import io.quarkiverse.langfuse.api.AsyncLangfuseOperations;
 import io.quarkiverse.langfuse.api.Cursor;
@@ -246,6 +247,21 @@ class AsyncEvaluatorOperationsTests extends EvaluatorOperationsTestSupport {
                 .isEqualTo("evaluator-typed");
 
         verifyEvaluatorsCreated(1);
+    }
+
+    @Test
+    void createIfAbsentRejectsNullRequest() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> asyncLangfuse.evaluators().createIfAbsent((CreateEvaluatorRequest) null))
+                .withMessage("request must not be null");
+
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> asyncLangfuse.evaluators().createIfAbsent((CreateCodeEvaluatorRequest1) null))
+                .withMessage("request must not be null");
+
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> asyncLangfuse.evaluators().createIfAbsent((CreateLlmAsJudgeEvaluatorRequest1) null))
+                .withMessage("request must not be null");
     }
 
     private void stubListingFailure(int status) {
