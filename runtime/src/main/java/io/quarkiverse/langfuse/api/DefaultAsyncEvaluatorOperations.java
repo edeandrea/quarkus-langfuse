@@ -20,12 +20,12 @@ final class DefaultAsyncEvaluatorOperations extends AbstractAsyncCursorOperation
 
     @Override
     public Uni<Evaluator> findByName(String evaluatorName) {
-        return scanForName(Names.require(evaluatorName, "Evaluator name"), EvaluatorOperationsBase::nameOf);
+        return scanForName(Names.require(evaluatorName, "Evaluator name"), EvaluatorNames::of);
     }
 
     @Override
     public Uni<Evaluator> createIfAbsent(CreateEvaluatorRequest request) {
-        var name = Names.require(EvaluatorOperationsBase.nameOf(request), "Evaluator name");
+        var name = Names.require(EvaluatorNames.of(request), "Evaluator name");
         return findByName(name)
                 .flatMap(existing -> (existing != null)
                         ? Uni.createFrom().item(existing)

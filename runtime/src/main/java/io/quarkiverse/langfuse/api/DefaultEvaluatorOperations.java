@@ -21,12 +21,12 @@ final class DefaultEvaluatorOperations extends AbstractCursorOperations<Evaluato
 
     @Override
     public Optional<Evaluator> findByName(String evaluatorName) {
-        return scanForName(Names.require(evaluatorName, "Evaluator name"), EvaluatorOperationsBase::nameOf);
+        return scanForName(Names.require(evaluatorName, "Evaluator name"), EvaluatorNames::of);
     }
 
     @Override
     public Evaluator createIfAbsent(CreateEvaluatorRequest request) {
-        var name = Names.require(EvaluatorOperationsBase.nameOf(request), "Evaluator name");
+        var name = Names.require(EvaluatorNames.of(request), "Evaluator name");
         return findByName(name)
                 .orElseGet(() -> this.evaluatorsApi.evaluatorsCreate(APIEvaluatorsCreateRequest.newBuilder()
                         .createEvaluatorRequest(request)

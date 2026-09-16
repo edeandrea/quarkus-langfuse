@@ -20,7 +20,7 @@ import io.smallrye.mutiny.Uni;
  *
  * @see EvaluatorOperations
  */
-public sealed interface AsyncEvaluatorOperations extends EvaluatorOperationsBase, AsyncCursorOperations<Evaluator>
+public sealed interface AsyncEvaluatorOperations extends AsyncCursorOperations<Evaluator>
         permits DefaultAsyncEvaluatorOperations {
 
     /**

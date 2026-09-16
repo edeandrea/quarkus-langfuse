@@ -11,14 +11,12 @@ import com.langfuse.api.model.Evaluator;
 import com.langfuse.api.model.LlmAsJudgeEvaluator1;
 
 /**
- * Common evaluator operations and helpers shared by {@link EvaluatorOperations} and
- * {@link AsyncEvaluatorOperations}.
- *
- * @see EvaluatorOperations
- * @see AsyncEvaluatorOperations
+ * Extracts natural-key names from polymorphic evaluator models.
  */
-sealed interface EvaluatorOperationsBase
-        permits EvaluatorOperations, AsyncEvaluatorOperations {
+final class EvaluatorNames {
+
+    private EvaluatorNames() {
+    }
 
     /**
      * Extracts the evaluator name from an {@link Evaluator}.
@@ -26,7 +24,7 @@ sealed interface EvaluatorOperationsBase
      * @param evaluator the evaluator, may be {@code null}
      * @return the evaluator name, or {@code null} if absent or unrecognized
      */
-    static String nameOf(Evaluator evaluator) {
+    static String of(Evaluator evaluator) {
         return Optional.ofNullable(evaluator)
                 .map(Evaluator::getActualInstance)
                 .flatMap(instance -> Optional.of(instance)
@@ -47,7 +45,7 @@ sealed interface EvaluatorOperationsBase
      * @return the evaluator name, or {@code null} if unrecognized
      * @throws NullPointerException if {@code request} is {@code null}
      */
-    static String nameOf(CreateEvaluatorRequest request) {
+    static String of(CreateEvaluatorRequest request) {
         Objects.requireNonNull(request, "request must not be null");
 
         return Optional.ofNullable(request.getActualInstance())

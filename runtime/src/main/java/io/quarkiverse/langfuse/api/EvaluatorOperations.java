@@ -20,7 +20,7 @@ import com.langfuse.api.model.Evaluator;
  *
  * @see AsyncEvaluatorOperations
  */
-public sealed interface EvaluatorOperations extends EvaluatorOperationsBase, CursorOperations<Evaluator>
+public sealed interface EvaluatorOperations extends CursorOperations<Evaluator>
         permits DefaultEvaluatorOperations {
 
     /**

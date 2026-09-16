@@ -14,7 +14,7 @@ import com.langfuse.api.model.CreateLlmAsJudgeEvaluatorRequest1;
 import com.langfuse.api.model.Evaluator;
 import com.langfuse.api.model.LlmAsJudgeEvaluator1;
 
-class EvaluatorOperationsBaseTests {
+class EvaluatorNamesTests {
 
     @Test
     void extractsNameFromCodeEvaluator() {
@@ -26,7 +26,7 @@ class EvaluatorOperationsBaseTests {
                 .build();
         var evaluator = new Evaluator(code);
 
-        assertThat(EvaluatorOperationsBase.nameOf(evaluator)).isEqualTo("my-code-evaluator");
+        assertThat(EvaluatorNames.of(evaluator)).isEqualTo("my-code-evaluator");
     }
 
     @Test
@@ -37,13 +37,13 @@ class EvaluatorOperationsBaseTests {
                 .build();
         var evaluator = new Evaluator(llm);
 
-        assertThat(EvaluatorOperationsBase.nameOf(evaluator)).isEqualTo("my-llm-evaluator");
+        assertThat(EvaluatorNames.of(evaluator)).isEqualTo("my-llm-evaluator");
     }
 
     @Test
     void returnsNullWhenEvaluatorOrInstanceIsNull() {
-        assertThat(EvaluatorOperationsBase.nameOf((Evaluator) null)).isNull();
-        assertThat(EvaluatorOperationsBase.nameOf(new Evaluator())).isNull();
+        assertThat(EvaluatorNames.of((Evaluator) null)).isNull();
+        assertThat(EvaluatorNames.of(new Evaluator())).isNull();
     }
 
     @Test
@@ -56,7 +56,7 @@ class EvaluatorOperationsBaseTests {
                 .build();
         var request = new CreateEvaluatorRequest(code);
 
-        assertThat(EvaluatorOperationsBase.nameOf(request)).isEqualTo("my-create-code-evaluator");
+        assertThat(EvaluatorNames.of(request)).isEqualTo("my-create-code-evaluator");
     }
 
     @Test
@@ -67,13 +67,13 @@ class EvaluatorOperationsBaseTests {
                 .build();
         var request = new CreateEvaluatorRequest(llm);
 
-        assertThat(EvaluatorOperationsBase.nameOf(request)).isEqualTo("my-create-llm-evaluator");
+        assertThat(EvaluatorNames.of(request)).isEqualTo("my-create-llm-evaluator");
     }
 
     @Test
     void throwsOnNullCreateRequest() {
         assertThatNullPointerException()
-                .isThrownBy(() -> EvaluatorOperationsBase.nameOf((CreateEvaluatorRequest) null));
+                .isThrownBy(() -> EvaluatorNames.of((CreateEvaluatorRequest) null));
     }
 
     @Test
@@ -90,6 +90,6 @@ class EvaluatorOperationsBaseTests {
         var mapper = new ObjectMapper();
         var evaluator = mapper.readValue(json, Evaluator.class);
 
-        assertThat(EvaluatorOperationsBase.nameOf(evaluator)).isEqualTo("evaluator-1");
+        assertThat(EvaluatorNames.of(evaluator)).isEqualTo("evaluator-1");
     }
 }
