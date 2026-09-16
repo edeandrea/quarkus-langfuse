@@ -32,11 +32,13 @@
  * {@link io.quarkiverse.langfuse.api.AsyncScoreConfigOperations}</li>
  * <li>{@link io.quarkiverse.langfuse.api.EvaluationRuleOperations} /
  * {@link io.quarkiverse.langfuse.api.AsyncEvaluationRuleOperations}</li>
+ * <li>{@link io.quarkiverse.langfuse.api.EvaluatorOperations} /
+ * {@link io.quarkiverse.langfuse.api.AsyncEvaluatorOperations}</li>
  * </ul>
  *
  * <h2>Page addressing</h2>
  * <p>
- * Used by every domain above except evaluation rules.
+ * Used by every domain above except evaluation rules and evaluators.
  * <ul>
  * <li>{@link io.quarkiverse.langfuse.api.Page} - a coordinate: a 1-based index and a size</li>
  * <li>{@link io.quarkiverse.langfuse.api.PageSelection} - which pages to visit: {@code all}, {@code
@@ -47,8 +49,8 @@
  *
  * <h2>Cursor addressing</h2>
  * <p>
- * Used by evaluation rules, whose collection Langfuse addresses with an opaque cursor rather than a
- * page index.
+ * Used by evaluation rules and evaluators, whose collections Langfuse addresses with an opaque cursor
+ * rather than a page index.
  * <ul>
  * <li>{@link io.quarkiverse.langfuse.api.Cursor} - a position: an opaque, server-issued value (or
  * none, for the start of the collection) and a limit</li>

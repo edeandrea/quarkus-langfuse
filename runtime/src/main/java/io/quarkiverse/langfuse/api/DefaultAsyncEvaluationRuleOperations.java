@@ -7,6 +7,7 @@ import com.langfuse.api.model.CreateEvaluationRuleRequest;
 import com.langfuse.api.model.EvaluationRule;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;
 
 final class DefaultAsyncEvaluationRuleOperations extends AbstractAsyncCursorOperations<EvaluationRule>
@@ -20,7 +21,7 @@ final class DefaultAsyncEvaluationRuleOperations extends AbstractAsyncCursorOper
 
     @Override
     public Uni<EvaluationRule> findByName(String ruleName) {
-        return scanForName(Names.require(ruleName, "Evaluation rule name"), EvaluationRule::getName);
+        return scanForName(ValidationUtils.ensureNotBlank(ruleName, "Evaluation rule name"), EvaluationRule::getName);
     }
 
     @Override

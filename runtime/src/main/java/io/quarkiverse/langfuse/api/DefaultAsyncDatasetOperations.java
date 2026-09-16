@@ -9,6 +9,7 @@ import com.langfuse.api.model.Dataset;
 
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;
 
 final class DefaultAsyncDatasetOperations extends AbstractAsyncPagedOperations<Dataset> implements AsyncDatasetOperations {
@@ -21,7 +22,7 @@ final class DefaultAsyncDatasetOperations extends AbstractAsyncPagedOperations<D
 
     @Override
     public Uni<Dataset> findByName(String datasetName) {
-        var name = Names.require(datasetName, "Dataset name");
+        var name = ValidationUtils.ensureNotBlank(datasetName, "Dataset name");
 
         // Direct lookup, not scanForName: Langfuse can resolve a dataset by name in one request, so
         // this domain never walks the collection the way the others have to.

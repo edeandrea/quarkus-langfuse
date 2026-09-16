@@ -11,6 +11,7 @@ import com.langfuse.api.model.Dataset;
 
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 
 final class DefaultDatasetOperations extends AbstractPagedOperations<Dataset> implements DatasetOperations {
     private final DatasetsApi datasetsApi;
@@ -22,7 +23,7 @@ final class DefaultDatasetOperations extends AbstractPagedOperations<Dataset> im
 
     @Override
     public Optional<Dataset> findByName(String datasetName) {
-        var name = Names.require(datasetName, "Dataset name");
+        var name = ValidationUtils.ensureNotBlank(datasetName, "Dataset name");
 
         // Direct lookup, not scanForName: Langfuse can resolve a dataset by name in one request
         // (datasetsGet takes the name directly), so this domain never has to walk the collection the

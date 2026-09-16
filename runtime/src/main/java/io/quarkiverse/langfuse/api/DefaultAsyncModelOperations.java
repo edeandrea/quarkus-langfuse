@@ -7,6 +7,7 @@ import com.langfuse.api.models.ModelsApi.APIModelsListRequest;
 import com.langfuse.api.models.async.ModelsApi;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;
 
 final class DefaultAsyncModelOperations extends AbstractAsyncPagedOperations<Model> implements AsyncModelOperations {
@@ -19,7 +20,7 @@ final class DefaultAsyncModelOperations extends AbstractAsyncPagedOperations<Mod
 
     @Override
     public Uni<Model> findByName(String modelName) {
-        return scanForName(Names.require(modelName, "Model name"), Model::getModelName);
+        return scanForName(ValidationUtils.ensureNotBlank(modelName, "Model name"), Model::getModelName);
     }
 
     @Override

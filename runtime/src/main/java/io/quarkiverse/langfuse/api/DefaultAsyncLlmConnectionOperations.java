@@ -7,6 +7,7 @@ import com.langfuse.api.model.LlmConnection;
 import com.langfuse.api.model.UpsertLlmConnectionRequest;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;
 
 final class DefaultAsyncLlmConnectionOperations extends AbstractAsyncPagedOperations<LlmConnection>
@@ -20,7 +21,7 @@ final class DefaultAsyncLlmConnectionOperations extends AbstractAsyncPagedOperat
 
     @Override
     public Uni<LlmConnection> findByProvider(String provider) {
-        return scanForName(Names.require(provider, "Provider"), LlmConnection::getProvider);
+        return scanForName(ValidationUtils.ensureNotBlank(provider, "Provider"), LlmConnection::getProvider);
     }
 
     @Override

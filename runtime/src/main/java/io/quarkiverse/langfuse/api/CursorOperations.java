@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  * @param <T> the type of the items in the collection
  * @see AbstractCursorOperations
  */
-sealed interface CursorOperations<T> permits EvaluationRuleOperations, AbstractCursorOperations {
+sealed interface CursorOperations<T> permits EvaluationRuleOperations, EvaluatorOperations, AbstractCursorOperations {
 
     /**
      * All items, fetched using the batch size configured by

@@ -9,6 +9,7 @@ import com.langfuse.api.scoreConfigs.ScoreConfigsApi.APIScoreConfigsCreateReques
 import com.langfuse.api.scoreConfigs.ScoreConfigsApi.APIScoreConfigsGetRequest;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 
 final class DefaultScoreConfigOperations extends AbstractPagedOperations<ScoreConfig> implements ScoreConfigOperations {
     private final ScoreConfigsApi scoreConfigsApi;
@@ -20,7 +21,7 @@ final class DefaultScoreConfigOperations extends AbstractPagedOperations<ScoreCo
 
     @Override
     public Optional<ScoreConfig> findByName(String configName) {
-        return scanForName(Names.require(configName, "Score config name"), ScoreConfig::getName);
+        return scanForName(ValidationUtils.ensureNotBlank(configName, "Score config name"), ScoreConfig::getName);
     }
 
     @Override

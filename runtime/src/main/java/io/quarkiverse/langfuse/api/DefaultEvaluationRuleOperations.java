@@ -9,6 +9,7 @@ import com.langfuse.api.model.CreateEvaluationRuleRequest;
 import com.langfuse.api.model.EvaluationRule;
 
 import io.quarkiverse.langfuse.config.LangfuseConfig;
+import io.quarkiverse.langfuse.util.ValidationUtils;
 
 final class DefaultEvaluationRuleOperations extends AbstractCursorOperations<EvaluationRule>
         implements EvaluationRuleOperations {
@@ -21,7 +22,7 @@ final class DefaultEvaluationRuleOperations extends AbstractCursorOperations<Eva
 
     @Override
     public Optional<EvaluationRule> findByName(String ruleName) {
-        return scanForName(Names.require(ruleName, "Evaluation rule name"), EvaluationRule::getName);
+        return scanForName(ValidationUtils.ensureNotBlank(ruleName, "Evaluation rule name"), EvaluationRule::getName);
     }
 
     @Override
