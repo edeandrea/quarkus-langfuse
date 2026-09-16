@@ -66,6 +66,11 @@ Langfuse uses two different pagination models depending on the resource. The lay
 | **Cursor**
 | `langfuse.evaluationRules()`
 | Query, paginate via cursor and create evaluation rules
+
+| Evaluators
+| **Cursor**
+| `langfuse.evaluators()`
+| Query, paginate via cursor and create evaluators
 |===
 
 === Page-Addressed Operations
@@ -117,7 +122,7 @@ NOTE: LLM connections are keyed by `provider` rather than `name`, so their opera
 
 === Cursor-Addressed Operations
 
-Evaluation rules use opaque server cursors rather than page numbers. Because Langfuse reports only a cursor and no total page count or item count, cursor operations do not fabricate totals or ordinal page indexes:
+Evaluation rules and evaluators use opaque server cursors rather than page numbers. Because Langfuse reports only a cursor and no total page count or item count, cursor operations do not fabricate totals or ordinal page indexes:
 
 [cols="2,2,3",options="header"]
 |===
@@ -157,7 +162,7 @@ Evaluation rules use opaque server cursors rather than page numbers. Because Lan
 
 | `T createIfAbsent(...)`
 | `Uni<T> createIfAbsent(...)`
-| Returns the existing rule or creates it (non-atomic).
+| Returns the existing item or creates it (non-atomic).
 |===
 
 == Pagination
@@ -258,6 +263,10 @@ langfuse.async().models().findByName("gpt-4o")
 | Evaluation Rules
 | `createIfAbsent(...)`
 | **Not atomic.** Cursor scan followed by create.
+
+| Evaluators
+| `createIfAbsent(...)`
+| **Not atomic.** Cursor scan followed by create.
 |===
 
 == Configuration Reference
@@ -274,7 +283,7 @@ These settings control the default page and batch sizes used by `findAll()` and 
 
 | `quarkus.langfuse.api.default-batch-size`
 | `50`
-| Default number of items per batch for cursor-addressed collections (evaluation rules).
+| Default number of items per batch for cursor-addressed collections (evaluation rules, evaluators).
 |===
 
 An explicit `PageSelection` or `CursorSelection` passed to `find(...)` or `stream(...)` overrides these defaults for that call.

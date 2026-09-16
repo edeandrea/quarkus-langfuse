@@ -28,6 +28,7 @@ public class AsyncLangfuseOperations {
     private final AsyncLlmConnectionOperations llmConnections;
     private final AsyncScoreConfigOperations scoreConfigs;
     private final AsyncEvaluationRuleOperations evaluationRules;
+    private final AsyncEvaluatorOperations evaluators;
 
     AsyncLangfuseOperations(LangfuseApi langfuseApi, LangfuseConfig config) {
         this.langfuseApi = langfuseApi;
@@ -36,6 +37,7 @@ public class AsyncLangfuseOperations {
         this.llmConnections = new DefaultAsyncLlmConnectionOperations(langfuseApi.asyncLlmConnections(), config);
         this.scoreConfigs = new DefaultAsyncScoreConfigOperations(langfuseApi.asyncScoreConfigs(), config);
         this.evaluationRules = new DefaultAsyncEvaluationRuleOperations(langfuseApi.asyncEvaluationRules(), config);
+        this.evaluators = new DefaultAsyncEvaluatorOperations(langfuseApi.asyncEvaluators(), config);
     }
 
     /**
@@ -90,5 +92,14 @@ public class AsyncLangfuseOperations {
      */
     public AsyncEvaluationRuleOperations evaluationRules() {
         return this.evaluationRules;
+    }
+
+    /**
+     * Operations over evaluators.
+     *
+     * @return the evaluator operations
+     */
+    public AsyncEvaluatorOperations evaluators() {
+        return this.evaluators;
     }
 }

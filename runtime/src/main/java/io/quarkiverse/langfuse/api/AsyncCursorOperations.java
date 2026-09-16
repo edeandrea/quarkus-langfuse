@@ -17,7 +17,8 @@ import io.smallrye.mutiny.Uni;
  * @param <T> the type of the items in the collection
  * @see AbstractAsyncCursorOperations
  */
-sealed interface AsyncCursorOperations<T> permits AsyncEvaluationRuleOperations, AbstractAsyncCursorOperations {
+sealed interface AsyncCursorOperations<T>
+        permits AsyncEvaluationRuleOperations, AsyncEvaluatorOperations, AbstractAsyncCursorOperations {
 
     /**
      * All items, fetched using the batch size configured by
