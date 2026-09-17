@@ -5,6 +5,9 @@ import java.util.Optional;
 import com.langfuse.api.model.CreateDatasetRequest;
 import com.langfuse.api.model.Dataset;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+
 /**
  * Higher-level operations over Langfuse datasets.
  *

@@ -8,6 +8,12 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
+
 class PaginationTests {
     private static final int DEFAULT_SIZE = 50;
 

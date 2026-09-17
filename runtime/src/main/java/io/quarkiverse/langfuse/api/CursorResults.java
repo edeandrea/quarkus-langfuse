@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import com.langfuse.api.model.CursorMeta;
 
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
+
 /**
  * Maps a generated cursor-paginated response onto a {@link CursorResult}.
  *
@@ -25,6 +28,6 @@ final class CursorResults {
                 .map(CursorMeta::getCursor)
                 .orElse(null);
 
-        return new DefaultCursorResult<>(data, cursor, nextCursor);
+        return CursorResult.of(data, cursor, nextCursor);
     }
 }

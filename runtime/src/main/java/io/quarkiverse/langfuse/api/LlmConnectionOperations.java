@@ -8,6 +8,9 @@ import java.util.Optional;
 import com.langfuse.api.model.LlmConnection;
 import com.langfuse.api.model.UpsertLlmConnectionRequest;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+
 /**
  * Higher-level operations over Langfuse LLM connections.
  *

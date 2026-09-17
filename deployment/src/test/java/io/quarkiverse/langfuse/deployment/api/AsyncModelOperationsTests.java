@@ -28,9 +28,9 @@ import com.langfuse.api.model.ModelUsageUnit;
 
 import io.quarkiverse.langfuse.api.AsyncLangfuseOperations;
 import io.quarkiverse.langfuse.api.LangfuseOperations;
-import io.quarkiverse.langfuse.api.Page;
-import io.quarkiverse.langfuse.api.PageSelection;
-import io.quarkiverse.langfuse.api.PagedResult;
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkus.test.QuarkusUnitTest;
@@ -299,15 +299,6 @@ class AsyncModelOperationsTests extends ModelOperationsTestSupport {
         verifyListRequests(3);
     }
 
-    private void stubNotFound() {
-        wiremock().register(
-                get(urlPathEqualTo(MODELS_PATH))
-                        .willReturn(aResponse()
-                                .withStatus(404)
-                                .withHeader("Content-Type", "application/json")
-                                .withBody("{\"message\":\"Models not found\"}")));
-    }
-
     private static <T> T await(Uni<T> uni) {
         return uni.await().atMost(TIMEOUT);
     }
@@ -323,4 +314,12 @@ class AsyncModelOperationsTests extends ModelOperationsTestSupport {
                 .unit(ModelUsageUnit.TOKENS)
                 .build();
     }
+
+    /**
+     * Makes the models listing return {@code 404}, which Langfuse uses for an absent collection.
+     */
+    private void stubNotFound() {
+        stubListingFailure(404);
+    }
+
 }

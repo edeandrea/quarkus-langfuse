@@ -1,7 +1,5 @@
 package io.quarkiverse.langfuse.deployment.api;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
@@ -23,9 +21,9 @@ import com.langfuse.api.model.CreateDatasetRequest;
 import com.langfuse.api.model.Dataset;
 
 import io.quarkiverse.langfuse.api.AsyncLangfuseOperations;
-import io.quarkiverse.langfuse.api.Page;
-import io.quarkiverse.langfuse.api.PageSelection;
-import io.quarkiverse.langfuse.api.PagedResult;
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkus.test.QuarkusUnitTest;
@@ -180,14 +178,6 @@ class AsyncDatasetOperationsTests extends DatasetOperationsTestSupport {
                 .isEqualTo("new-dataset");
 
         verifyDatasetsCreated(1);
-    }
-
-    private void stubListingFailure() {
-        wiremock().register(get(urlPathEqualTo(DATASETS_PATH))
-                .willReturn(aResponse()
-                        .withStatus(404)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{\"message\":\"not found\"}")));
     }
 
     private static CreateDatasetRequest createRequest(String name) {

@@ -1,5 +1,7 @@
 package io.quarkiverse.langfuse.api;
 
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
 import io.smallrye.mutiny.Uni;
 
 /**

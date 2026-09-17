@@ -1,7 +1,9 @@
-package io.quarkiverse.langfuse.api;
+package io.quarkiverse.langfuse.api.cursor;
 
 import java.util.Optional;
 import java.util.OptionalInt;
+
+import io.quarkiverse.langfuse.api.paging.PageSelection;
 
 /**
  * Describes <em>which</em> batches a cursor-addressed traversal should visit.

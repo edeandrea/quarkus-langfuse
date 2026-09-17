@@ -2,6 +2,9 @@ package io.quarkiverse.langfuse.api;
 
 import java.util.List;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 

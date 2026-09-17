@@ -1,6 +1,5 @@
 package io.quarkiverse.langfuse.deployment.api;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
@@ -22,10 +21,10 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import com.langfuse.api.model.CreateEvaluationRuleRequest;
 import com.langfuse.api.model.EvaluationRule;
 
-import io.quarkiverse.langfuse.api.Cursor;
-import io.quarkiverse.langfuse.api.CursorResult;
-import io.quarkiverse.langfuse.api.CursorSelection;
 import io.quarkiverse.langfuse.api.LangfuseOperations;
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkus.test.QuarkusUnitTest;
@@ -239,14 +238,6 @@ class EvaluationRuleOperationsTests extends EvaluationRuleOperationsTestSupport 
                 .isEqualTo("rule-new");
 
         verifyRulesCreated(1);
-    }
-
-    private void stubListingFailure(int status) {
-        wiremock().register(get(urlPathEqualTo(RULES_PATH))
-                .willReturn(aResponse()
-                        .withStatus(status)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{\"message\":\"not found\"}")));
     }
 
     private static CreateEvaluationRuleRequest createRequest(String name) {

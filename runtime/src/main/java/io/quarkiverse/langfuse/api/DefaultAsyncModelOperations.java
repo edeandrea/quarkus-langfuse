@@ -10,6 +10,8 @@ import com.langfuse.api.models.ModelsApi.APIModelsDeleteRequest;
 import com.langfuse.api.models.ModelsApi.APIModelsListRequest;
 import com.langfuse.api.models.async.ModelsApi;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;

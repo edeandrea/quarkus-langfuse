@@ -2,6 +2,9 @@ package io.quarkiverse.langfuse.api;
 
 import java.util.List;
 
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 

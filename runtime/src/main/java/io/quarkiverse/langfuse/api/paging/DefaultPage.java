@@ -1,4 +1,4 @@
-package io.quarkiverse.langfuse.api;
+package io.quarkiverse.langfuse.api.paging;
 
 record DefaultPage(int index, int size) implements Page {
 

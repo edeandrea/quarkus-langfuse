@@ -1,5 +1,8 @@
 package io.quarkiverse.langfuse.api;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
+
 /**
  * Fetches a single page of a page-addressed Langfuse collection.
  *

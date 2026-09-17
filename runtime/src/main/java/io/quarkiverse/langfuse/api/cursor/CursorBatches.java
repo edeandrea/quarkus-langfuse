@@ -1,13 +1,17 @@
-package io.quarkiverse.langfuse.api;
+package io.quarkiverse.langfuse.api.cursor;
 
 import java.util.Optional;
 import java.util.OptionalInt;
 
-record FromCursor(Cursor start) implements CursorSelection {
+record CursorBatches(Cursor start, int count) implements CursorSelection {
 
-    FromCursor {
+    CursorBatches {
         if (start == null) {
             throw new IllegalArgumentException("Start cursor must not be null");
+        }
+
+        if (count < 0) {
+            throw new IllegalArgumentException("Batch count must not be negative, but was %d".formatted(count));
         }
     }
 
@@ -23,6 +27,6 @@ record FromCursor(Cursor start) implements CursorSelection {
 
     @Override
     public OptionalInt batchCount() {
-        return OptionalInt.empty();
+        return OptionalInt.of(count);
     }
 }

@@ -7,6 +7,8 @@ import com.langfuse.api.datasets.async.DatasetsApi;
 import com.langfuse.api.model.CreateDatasetRequest;
 import com.langfuse.api.model.Dataset;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkiverse.langfuse.util.ValidationUtils;

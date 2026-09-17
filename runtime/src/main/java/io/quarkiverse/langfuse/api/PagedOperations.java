@@ -3,6 +3,10 @@ package io.quarkiverse.langfuse.api;
 import java.util.List;
 import java.util.stream.Stream;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
+
 /**
  * Common operations over a page-addressed Langfuse collection.
  *
