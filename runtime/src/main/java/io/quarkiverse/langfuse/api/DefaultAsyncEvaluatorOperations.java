@@ -10,6 +10,8 @@ import com.langfuse.api.evaluators.async.EvaluatorsApi;
 import com.langfuse.api.model.CreateEvaluatorRequest;
 import com.langfuse.api.model.Evaluator;
 
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;

@@ -1,4 +1,4 @@
-package io.quarkiverse.langfuse.api;
+package io.quarkiverse.langfuse.api.cursor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import java.util.OptionalInt;
 
 import org.junit.jupiter.api.Test;
+
+import io.quarkiverse.langfuse.api.paging.PageSelection;
 
 class CursorSelectionTests {
 

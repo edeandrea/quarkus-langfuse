@@ -1,4 +1,4 @@
-package io.quarkiverse.langfuse.api;
+package io.quarkiverse.langfuse.api.cursor;
 
 import java.util.List;
 import java.util.Optional;

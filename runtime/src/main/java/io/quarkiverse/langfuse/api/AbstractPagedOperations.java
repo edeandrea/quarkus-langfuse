@@ -4,6 +4,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 

@@ -1,7 +1,7 @@
 = Higher-Level API Operations
 include::./includes/attributes.adoc[]
 
-The generated `LangfuseApi` client mirrors the Langfuse REST API one endpoint at a time. For common tasks - looking things up by name, checking whether they exist, ensuring resources are created idempotently at startup, deleting them in batches, and walking paginated collections without hand-rolling page arithmetic - the extension provides a curated, higher-level layer in `io.quarkiverse.langfuse.api`.
+The generated `LangfuseApi` client mirrors the Langfuse REST API one endpoint at a time. For common tasks - looking things up by name, checking whether they exist, ensuring resources are created idempotently at startup, deleting them in batches, and walking paginated collections without hand-rolling page arithmetic - the extension provides a curated, higher-level layer in `io.quarkiverse.langfuse.api`. The coordinate and selection types that describe which part of a collection to walk live alongside it, in `io.quarkiverse.langfuse.api.paging` and `io.quarkiverse.langfuse.api.cursor`.
 
 Anything not covered by this layer remains one call away through `api()`, which returns the underlying `LangfuseApi`.
 
@@ -209,6 +209,9 @@ A `Page` is a 1-based coordinate. A `PageSelection` describes the intent of a tr
 
 [source,java]
 ----
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+
 // Coordinates
 Page.of(2, 75);                            // page 2, 75 items per page
 Page.ofSize(75);                           // page 1, 75 items per page
@@ -230,6 +233,9 @@ A `Cursor` is an opaque token returned by Langfuse, never parsed by the extensio
 
 [source,java]
 ----
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
+
 Cursor.first(75);                          // start of the collection, 75 items per request
 Cursor.at("opaque-token", 75);             // resume from a previous response's cursor
 

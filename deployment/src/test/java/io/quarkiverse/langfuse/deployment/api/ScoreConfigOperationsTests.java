@@ -1,6 +1,5 @@
 package io.quarkiverse.langfuse.deployment.api;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
@@ -22,9 +21,9 @@ import com.langfuse.api.model.ScoreConfig;
 import com.langfuse.api.model.ScoreConfigDataType;
 
 import io.quarkiverse.langfuse.api.LangfuseOperations;
-import io.quarkiverse.langfuse.api.Page;
-import io.quarkiverse.langfuse.api.PageSelection;
-import io.quarkiverse.langfuse.api.PagedResult;
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkus.test.QuarkusUnitTest;
@@ -211,14 +210,6 @@ class ScoreConfigOperationsTests extends ScoreConfigOperationsTestSupport {
                 .isEqualTo("config-new");
 
         verifyConfigsCreated(1);
-    }
-
-    private void stubListingFailure(int status) {
-        wiremock().register(get(urlPathEqualTo(SCORE_CONFIGS_PATH))
-                .willReturn(aResponse()
-                        .withStatus(status)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{\"message\":\"not found\"}")));
     }
 
     private static CreateScoreConfigRequest createRequest(String name) {

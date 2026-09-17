@@ -1,4 +1,4 @@
-package io.quarkiverse.langfuse.api;
+package io.quarkiverse.langfuse.api.paging;
 
 /**
  * A single page coordinate: which page to request, and how many items it should contain.

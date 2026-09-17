@@ -54,7 +54,10 @@ class DeletionConcurrencyTests {
 
     @Test
     void peakInFlightNeverExceedsTheConfiguredCeiling() {
-        var collection = FakeCollection.of(8);
+        // Three runners are expected: the ceiling is 3 and the batch is larger, so the fan-out submits
+        // two and drains the third on the calling thread. The rendezvous holds all three open at once,
+        // which is what makes the lower bound a fact rather than a timing guess.
+        var collection = FakeCollection.of(8).withRendezvous(3);
 
         var result = Deletions.deleteAll(NAMES, "Name", collection::resolve, collection::deleteTracked, 3);
 
@@ -80,7 +83,10 @@ class DeletionConcurrencyTests {
 
     @Test
     void aCeilingAboveTheBatchSizeNeverExceedsTheBatchSize() {
-        var collection = FakeCollection.of(8);
+        // The ceiling of 100 is clamped to the batch size, so eight runners are expected - not 100.
+        // Rendezvousing on eight proves the clamp let all eight run, while the assertion proves it
+        // never went past them.
+        var collection = FakeCollection.of(8).withRendezvous(8);
 
         Deletions.deleteAll(NAMES, "Name", collection::resolve, collection::deleteTracked, 100);
 

@@ -90,7 +90,10 @@ class DeletionBatchTests {
 
         assertThat(result.size()).isEqualTo(2);
         assertThat(result.deleted()).containsExactly("item-1", "item-2");
-        assertThat(collection.deletedIds()).containsExactly("id-of-item-1", "id-of-item-2");
+        // In any order: this asserts the collapse to one delete per identifier, not an ordering. The
+        // ids are recorded as each delete completes, and completion order across a concurrent fan-out
+        // is not deterministic - result order is, and result.deleted() above already covers that.
+        assertThat(collection.deletedIds()).containsExactlyInAnyOrder("id-of-item-1", "id-of-item-2");
     }
 
     @Test

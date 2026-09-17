@@ -6,6 +6,8 @@ import com.langfuse.api.scoreConfigs.ScoreConfigsApi.APIScoreConfigsCreateReques
 import com.langfuse.api.scoreConfigs.ScoreConfigsApi.APIScoreConfigsGetRequest;
 import com.langfuse.api.scoreConfigs.async.ScoreConfigsApi;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkiverse.langfuse.util.ValidationUtils;
 import io.smallrye.mutiny.Uni;

@@ -2,6 +2,9 @@ package io.quarkiverse.langfuse.api;
 
 import java.util.function.Function;
 
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.smallrye.mutiny.Multi;

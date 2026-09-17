@@ -1,7 +1,5 @@
 package io.quarkiverse.langfuse.deployment.api;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
@@ -27,9 +25,9 @@ import com.langfuse.api.model.CreateEvaluatorRequest;
 import com.langfuse.api.model.CreateLlmAsJudgeEvaluatorRequest1;
 
 import io.quarkiverse.langfuse.api.AsyncLangfuseOperations;
-import io.quarkiverse.langfuse.api.Cursor;
-import io.quarkiverse.langfuse.api.CursorResult;
-import io.quarkiverse.langfuse.api.CursorSelection;
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
 import io.quarkiverse.langfuse.client.LangfuseNotFoundException;
 import io.quarkiverse.langfuse.config.LangfuseConfig;
 import io.quarkus.test.QuarkusUnitTest;
@@ -262,14 +260,6 @@ class AsyncEvaluatorOperationsTests extends EvaluatorOperationsTestSupport {
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> asyncLangfuse.evaluators().createIfAbsent((CreateLlmAsJudgeEvaluatorRequest1) null))
                 .withMessage("request must not be null");
-    }
-
-    private void stubListingFailure(int status) {
-        wiremock().register(get(urlPathEqualTo(EVALUATORS_PATH))
-                .willReturn(aResponse()
-                        .withStatus(status)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{\"message\":\"not found\"}")));
     }
 
     private static CreateEvaluatorRequest createRequest(String name) {

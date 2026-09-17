@@ -1,5 +1,7 @@
 package io.quarkiverse.langfuse.api;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.smallrye.mutiny.Uni;
 
 /**

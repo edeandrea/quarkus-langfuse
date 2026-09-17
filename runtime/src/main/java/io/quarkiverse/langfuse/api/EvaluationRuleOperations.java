@@ -8,6 +8,9 @@ import java.util.Optional;
 import com.langfuse.api.model.CreateEvaluationRuleRequest;
 import com.langfuse.api.model.EvaluationRule;
 
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
+
 /**
  * Higher-level operations over Langfuse evaluation rules.
  *

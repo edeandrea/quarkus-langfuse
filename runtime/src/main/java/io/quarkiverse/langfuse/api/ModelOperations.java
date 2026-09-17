@@ -8,6 +8,9 @@ import java.util.Optional;
 import com.langfuse.api.model.CreateModelRequest;
 import com.langfuse.api.model.Model;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+
 /**
  * Higher-level operations over Langfuse model definitions.
  *

@@ -5,6 +5,10 @@ import java.util.OptionalInt;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
+import io.quarkiverse.langfuse.api.paging.PageSelection;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 

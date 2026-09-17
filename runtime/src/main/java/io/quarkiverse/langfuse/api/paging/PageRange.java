@@ -1,12 +1,16 @@
-package io.quarkiverse.langfuse.api;
+package io.quarkiverse.langfuse.api.paging;
 
 import java.util.OptionalInt;
 
-record FromPage(Page start) implements PageSelection {
+record PageRange(Page start, int count) implements PageSelection {
 
-    FromPage {
+    PageRange {
         if (start == null) {
             throw new IllegalArgumentException("Start page must not be null");
+        }
+
+        if (count < 0) {
+            throw new IllegalArgumentException("Page count must not be negative, but was %d".formatted(count));
         }
     }
 
@@ -22,6 +26,6 @@ record FromPage(Page start) implements PageSelection {
 
     @Override
     public OptionalInt pageCount() {
-        return OptionalInt.empty();
+        return OptionalInt.of(count);
     }
 }

@@ -1,6 +1,8 @@
-package io.quarkiverse.langfuse.api;
+package io.quarkiverse.langfuse.api.cursor;
 
 import java.util.Optional;
+
+import io.quarkiverse.langfuse.api.paging.Page;
 
 /**
  * A position within a cursor-addressed collection, together with how many items to request from it.

@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import com.langfuse.api.model.UtilsMetaResponse;
 
+import io.quarkiverse.langfuse.api.paging.Page;
+import io.quarkiverse.langfuse.api.paging.PagedResult;
+
 /**
  * Maps a generated paginated response onto a {@link PagedResult}.
  *
@@ -23,7 +26,7 @@ final class PagedResults {
     static <T> PagedResult<T> from(Page page, List<T> data, UtilsMetaResponse meta) {
         var metadata = Optional.ofNullable(meta);
 
-        return new DefaultPagedResult<>(
+        return PagedResult.of(
                 data,
                 page,
                 metadata.map(UtilsMetaResponse::getTotalItems).orElse(0),

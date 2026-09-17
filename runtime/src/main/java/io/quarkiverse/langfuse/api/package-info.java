@@ -36,28 +36,16 @@
  * {@link io.quarkiverse.langfuse.api.AsyncEvaluatorOperations}</li>
  * </ul>
  *
- * <h2>Page addressing</h2>
+ * <h2>Addressing</h2>
  * <p>
- * Used by every domain above except evaluation rules and evaluators.
+ * How a traversal says <em>which</em> part of a collection it wants lives alongside the coordinate
+ * types themselves, in one subpackage per addressing model.
  * <ul>
- * <li>{@link io.quarkiverse.langfuse.api.Page} - a coordinate: a 1-based index and a size</li>
- * <li>{@link io.quarkiverse.langfuse.api.PageSelection} - which pages to visit: {@code all}, {@code
- * from}, {@code only}, {@code range}, {@code rangeClosed}</li>
- * <li>{@link io.quarkiverse.langfuse.api.PagedResult} - a page of items plus the totals Langfuse
- * reports</li>
- * </ul>
- *
- * <h2>Cursor addressing</h2>
- * <p>
- * Used by evaluation rules and evaluators, whose collections Langfuse addresses with an opaque cursor
- * rather than a page index.
- * <ul>
- * <li>{@link io.quarkiverse.langfuse.api.Cursor} - a position: an opaque, server-issued value (or
- * none, for the start of the collection) and a limit</li>
- * <li>{@link io.quarkiverse.langfuse.api.CursorSelection} - which batches to visit: {@code all},
- * {@code from}, {@code only}, {@code first}</li>
- * <li>{@link io.quarkiverse.langfuse.api.CursorResult} - a batch of items plus the cursor needed to
- * continue</li>
+ * <li>{@link io.quarkiverse.langfuse.api.paging} - page addressing, used by every domain above
+ * except evaluation rules and evaluators</li>
+ * <li>{@link io.quarkiverse.langfuse.api.cursor} - cursor addressing, used by evaluation rules and
+ * evaluators, whose collections Langfuse addresses with an opaque cursor rather than a page
+ * index</li>
  * </ul>
  */
 package io.quarkiverse.langfuse.api;

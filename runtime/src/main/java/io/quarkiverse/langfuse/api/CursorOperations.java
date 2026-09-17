@@ -3,6 +3,10 @@ package io.quarkiverse.langfuse.api;
 import java.util.List;
 import java.util.stream.Stream;
 
+import io.quarkiverse.langfuse.api.cursor.Cursor;
+import io.quarkiverse.langfuse.api.cursor.CursorResult;
+import io.quarkiverse.langfuse.api.cursor.CursorSelection;
+
 /**
  * Common operations over a cursor-addressed Langfuse collection.
  *
