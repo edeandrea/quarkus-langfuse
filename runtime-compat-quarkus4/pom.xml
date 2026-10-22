@@ -7,9 +7,9 @@
 		<artifactId>quarkus-langfuse-parent</artifactId>
 		<version>999-SNAPSHOT</version>
 	</parent>
-	<artifactId>quarkus-langfuse-otel-exporter-quarkus4</artifactId>
-	<name>Quarkus Langfuse - OTel Exporter (Quarkus 4.x)</name>
-	<description>Span exporter factory for Quarkus 4.x, where HttpExporter lives in io.opentelemetry.exporter.otlp.internal.</description>
+	<artifactId>quarkus-langfuse-compat-quarkus4</artifactId>
+	<name>Quarkus Langfuse - Quarkus 4.x Support</name>
+	<description>Code that depends on the Quarkus 4.x line: the OTel span exporter factory (HttpExporter package) and the Jackson 3 mixins.</description>
 
 	<!-- Pinned to a Quarkus 4 release (not quarkus.version) because HttpExporter only exists at this package from 4.x -->
 	<dependencyManagement>
@@ -27,7 +27,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>io.quarkiverse.langfuse</groupId>
-			<artifactId>quarkus-langfuse-otel-spi</artifactId>
+			<artifactId>quarkus-langfuse-compat-spi</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>
 		</dependency>
@@ -39,6 +39,17 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>io.quarkiverse.langfuse</groupId>
+			<artifactId>quarkus-langfuse-client</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-jackson</artifactId>
 			<optional>true</optional>
 		</dependency>
 	</dependencies>

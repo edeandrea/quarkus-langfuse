@@ -27,17 +27,17 @@
 		</dependency>
 		<dependency>
 			<groupId>io.quarkiverse.langfuse</groupId>
-			<artifactId>quarkus-langfuse-otel-spi</artifactId>
+			<artifactId>quarkus-langfuse-compat-spi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkiverse.langfuse</groupId>
-			<artifactId>quarkus-langfuse-otel-exporter-quarkus3</artifactId>
+			<artifactId>quarkus-langfuse-compat-quarkus3</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkiverse.langfuse</groupId>
-			<artifactId>quarkus-langfuse-otel-exporter-quarkus4</artifactId>
+			<artifactId>quarkus-langfuse-compat-quarkus4</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
