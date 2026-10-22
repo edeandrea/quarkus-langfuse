@@ -37,6 +37,7 @@ import io.quarkus.vertx.core.deployment.CoreVertxBuildItem;
 class LangfuseProcessor {
     private static final String FEATURE = "langfuse";
     private static final String QUARKUS_4_HTTP_EXPORTER = "io.opentelemetry.exporter.otlp.internal.HttpExporter";
+    private static final String QUARKUS_4_JSON_MAPPER_CUSTOMIZER = "io.quarkus.jackson.JsonMapperBuilderCustomizer";
     private static final String EXPORTER_FACTORY_QUARKUS_3 = "io.quarkiverse.langfuse.runtime.otel.LangfuseSpanExporterFactoryQuarkus3";
     private static final String EXPORTER_FACTORY_QUARKUS_4 = "io.quarkiverse.langfuse.runtime.otel.LangfuseSpanExporterFactoryQuarkus4";
 
@@ -96,6 +97,22 @@ class LangfuseProcessor {
     ServiceProviderBuildItem nativeImageServiceProviderRegistration() {
         return new ServiceProviderBuildItem(LangfuseApiBuilderFactory.class.getName(),
                 QuarkusLangfuseApiBuilderFactory.class.getName());
+    }
+
+    /**
+     * Quarkus 3.x uses Jackson 2 ({@code com.fasterxml.jackson}) and Quarkus 4.x uses Jackson 3
+     * ({@code tools.jackson}). A class compiled against one cannot be loaded against the other, so the Jackson mixins
+     * exist in a Jackson 2 and a Jackson 3 variant and only the one matching the application's Quarkus line is indexed.
+     */
+    @BuildStep
+    void indexJacksonMixins(BuildProducer<IndexDependencyBuildItem> indexDependency) {
+        indexDependency.produce(new IndexDependencyBuildItem(
+                "io.quarkiverse.langfuse",
+                isJackson3() ? "quarkus-langfuse-compat-quarkus4" : "quarkus-langfuse-compat-quarkus3"));
+    }
+
+    private static boolean isJackson3() {
+        return QuarkusClassLoader.isClassPresentAtRuntime(QUARKUS_4_JSON_MAPPER_CUSTOMIZER);
     }
 
     @BuildStep

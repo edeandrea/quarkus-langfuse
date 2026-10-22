@@ -1,16 +1,16 @@
 package io.quarkiverse.langfuse.client.jaxrs;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import jakarta.ws.rs.core.MediaType;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.langfuse.api.LangfuseErrorBody;
+
+import io.vertx.core.json.JsonObject;
 
 /**
  * Turns a raw error response body into a {@link LangfuseErrorBody}.
@@ -28,9 +28,6 @@ import com.langfuse.api.LangfuseErrorBody;
  * unexpected body therefore degrades to {@code opaque}/{@code empty}.
  */
 final class LangfuseErrorBodies {
-
-    private static final ObjectMapper MAPPER = new ObjectMapper()
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
     private LangfuseErrorBodies() {
     }
@@ -60,13 +57,36 @@ final class LangfuseErrorBodies {
                         .isPresent();
     }
 
+    /**
+     * Parsed with Vert.x rather than Jackson: Quarkus 3.x ships Jackson 2 and Quarkus 4.x ships Jackson 3, and a
+     * class compiled against one cannot be loaded against the other, whereas {@link JsonObject} is the same type
+     * on both.
+     */
     private static LangfuseErrorBody parseJson(String raw) {
+        return parseObject(raw)
+                .map(fields -> fromObject(fields, raw))
+                .orElseGet(() -> LangfuseErrorBody.opaque(raw));
+    }
+
+    /**
+     * @return the top-level scalar fields of {@code raw} as text, or empty if it is not a well-formed JSON object
+     */
+    private static Optional<Map<String, String>> parseObject(String raw) {
         try {
-            var root = MAPPER.readTree(raw);
-            return root.isObject() ? fromObject(root, raw) : LangfuseErrorBody.opaque(raw);
-        } catch (JacksonException e) {
-            return LangfuseErrorBody.opaque(raw);
+            return Optional.of(new JsonObject(raw))
+                    .map(LangfuseErrorBodies::scalarFields);
+        } catch (RuntimeException e) {
+            return Optional.empty();
         }
+    }
+
+    private static Map<String, String> scalarFields(JsonObject root) {
+        return root.getMap()
+                .entrySet()
+                .stream()
+                .filter(e -> (e.getValue() instanceof String) || (e.getValue() instanceof Number)
+                        || (e.getValue() instanceof Boolean))
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, e -> String.valueOf(e.getValue())));
     }
 
     /**
@@ -74,20 +94,17 @@ final class LangfuseErrorBodies {
      * {@code PublicApiError} and {@code error} elsewhere - {@code {"error":"LangfuseNotFoundError"}} -
      * so both names are consulted, in that order.
      */
-    private static LangfuseErrorBody fromObject(JsonNode root, String raw) {
+    private static LangfuseErrorBody fromObject(Map<String, String> fields, String raw) {
         return LangfuseErrorBody.of(
-                textField(root, "message").orElse(raw),
-                textField(root, "code")
-                        .or(() -> textField(root, "error"))
+                textField(fields, "message").orElse(raw),
+                textField(fields, "code")
+                        .or(() -> textField(fields, "error"))
                         .orElse(null),
                 raw);
     }
 
-    private static Optional<String> textField(JsonNode root, String name) {
-        return Optional.ofNullable(root.get(name))
-                .filter(JsonNode::isValueNode)
-                .filter(Predicate.not(JsonNode::isNull))
-                .map(JsonNode::asText)
+    private static Optional<String> textField(Map<String, String> fields, String name) {
+        return Optional.ofNullable(fields.get(name))
                 .filter(Predicate.not(String::isBlank));
     }
 }

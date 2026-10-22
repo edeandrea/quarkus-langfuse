@@ -7,8 +7,8 @@
 		<artifactId>quarkus-langfuse-parent</artifactId>
 		<version>999-SNAPSHOT</version>
 	</parent>
-	<artifactId>quarkus-langfuse-otel-spi</artifactId>
-	<name>Quarkus Langfuse - OTel SPI</name>
+	<artifactId>quarkus-langfuse-compat-spi</artifactId>
+	<name>Quarkus Langfuse - Compat SPI</name>
 	<description>SPI for creating the OTLP HTTP span exporter. Shared by the Quarkus-version-specific implementations.</description>
 
 	<dependencies>

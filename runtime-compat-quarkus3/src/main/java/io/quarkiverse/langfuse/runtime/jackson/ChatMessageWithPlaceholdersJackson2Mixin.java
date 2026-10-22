@@ -24,8 +24,8 @@ import io.quarkus.jackson.JacksonMixin;
  * but absent from {@link PlaceholderMessage}).
  */
 @JacksonMixin(ChatMessageWithPlaceholders.class)
-@JsonDeserialize(using = ChatMessageWithPlaceholdersMixin.ChatMessageWithPlaceholdersDeserializer.class)
-public interface ChatMessageWithPlaceholdersMixin {
+@JsonDeserialize(using = ChatMessageWithPlaceholdersJackson2Mixin.ChatMessageWithPlaceholdersDeserializer.class)
+public interface ChatMessageWithPlaceholdersJackson2Mixin {
 
     class ChatMessageWithPlaceholdersDeserializer extends StdDeserializer<ChatMessageWithPlaceholders> {
 

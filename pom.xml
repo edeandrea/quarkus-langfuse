@@ -16,9 +16,9 @@
 	<modules>
 		<module>langfuse-client</module>
 		<module>langfuse-testcontainers</module>
-		<module>runtime-otel-spi</module>
-		<module>runtime-otel-exporter-quarkus3</module>
-		<module>runtime-otel-exporter-quarkus4</module>
+		<module>runtime-compat-spi</module>
+		<module>runtime-compat-quarkus3</module>
+		<module>runtime-compat-quarkus4</module>
 		<module>deployment</module>
 		<module>runtime</module>
 		<module>integration-tests</module>
